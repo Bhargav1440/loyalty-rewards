@@ -1,46 +1,26 @@
 """Customer Loyalty Rewards System - stdlib only (http.server + sqlite3)."""
-import os
-import json
-import hmac
-import hashlib
-import secrets
-import sqlite3
-import time
-from pathlib import Path
+import os, json, hmac, hashlib, secrets, sqlite3, time
 from contextlib import contextmanager
 from http.server import ThreadingHTTPServer, BaseHTTPRequestHandler
 from urllib.parse import urlparse
 
+def _load_env():
+    """Read KEY=VALUE lines from a local .env file (real env vars win)."""
+    p = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env")
+    if os.path.exists(p):
+        for line in open(p, encoding="utf-8"):
+            line = line.strip()
+            if line and not line.startswith("#") and "=" in line:
+                k, v = line.split("=", 1)
+                os.environ.setdefault(k.strip(), v.strip().strip('"').strip("'"))
+_load_env()
 
-# Load settings from .env file
-def load_env():
-    env_file = Path(__file__).with_name(".env")
-
-    if env_file.exists():
-        for raw_line in env_file.read_text(encoding="utf-8").splitlines():
-            line = raw_line.strip()
-
-            if not line or line.startswith("#") or "=" not in line:
-                continue
-
-            key, value = line.split("=", 1)
-            key = key.strip()
-            value = value.strip().strip('"').strip("'")
-
-            # Existing system environment variables take priority
-            os.environ.setdefault(key, value)
-
-
-load_env()
-
-# Application settings
 DB = os.environ.get("DB_PATH", "loyalty.db")
 SECRET = os.environ.get("CODE_SECRET", "change-me").encode()
 ADMIN_PASSWORD = os.environ.get("ADMIN_PASSWORD", "change-me-admin")
 PORT = int(os.environ.get("PORT", "8000"))
-
-MAX_FAILS, WINDOW = 5, 900
-ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+MAX_FAILS, WINDOW = 5, 900          # 5 bad codes / 15 min -> locked
+ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"  # no 0/O/1/I
 TIERS = [(1000, "Gold"), (300, "Silver"), (0, "Bronze")]
 SCHEMA = """
 CREATE TABLE IF NOT EXISTS products(id INTEGER PRIMARY KEY, name TEXT NOT NULL, points INTEGER NOT NULL CHECK(points>0));
