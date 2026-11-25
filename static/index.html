@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="dark">
+<title>Box Rewards</title>
+<style>
+:root{--bg:#09120f;--panel:rgba(18,32,28,.72);--gold:#d8b86f;--gold2:#f6e7b8;--ink:#f1ece2;--mute:#94a39b;--line:rgba(216,184,111,.25);--err:#ff9d8f;--ok:#9be3b4;--serif:"Didot","Bodoni MT","Playfair Display",Georgia,serif;--sans:"Gill Sans","Segoe UI",Helvetica,Arial,sans-serif}
+*{box-sizing:border-box}
+body{margin:0;min-height:100vh;background:radial-gradient(1200px 700px at 80% -10%,#15332a 0%,transparent 60%),var(--bg);color:var(--ink);font:16px/1.6 var(--sans)}
+body::before{content:"";position:fixed;inset:-20%;background:radial-gradient(closest-side,rgba(216,184,111,.13),transparent);width:60vmax;height:60vmax;animation:drift 22s ease-in-out infinite alternate;pointer-events:none}
+@keyframes drift{to{transform:translate(55vw,35vh) scale(1.3)}}
+header{position:relative;display:flex;justify-content:space-between;align-items:center;padding:22px clamp(18px,5vw,56px);border-bottom:1px solid var(--line)}
+.logo{font:400 22px var(--serif);letter-spacing:.32em;text-transform:uppercase;color:var(--gold2)}
+nav button{margin-left:10px}
+main{position:relative;max-width:900px;margin:0 auto;padding:clamp(20px,5vw,48px) 20px 80px}
+h2{font:400 26px var(--serif);margin:0 0 14px;color:var(--gold2)}
+section{background:var(--panel);backdrop-filter:blur(8px);border:1px solid var(--line);padding:clamp(18px,4vw,32px);margin-bottom:22px}
+input,select{font:inherit;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);padding:10px 4px;outline:0;transition:border-color .3s}
+input:focus,select:focus{border-color:var(--gold)}select option{background:#10201b}
+input::placeholder{color:var(--mute)}
+button{position:relative;overflow:hidden;font:inherit;cursor:pointer;color:#14201b;background:linear-gradient(135deg,var(--gold),var(--gold2));border:0;padding:11px 26px;letter-spacing:.06em;transition:transform .25s,box-shadow .25s}
+button::after{content:"";position:absolute;top:0;left:-80%;width:50%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,.65),transparent);transform:skewX(-20deg);transition:left .6s}
+button:hover::after{left:130%}button:hover{transform:translateY(-1px);box-shadow:0 8px 24px rgba(216,184,111,.25)}
+button.ghost{background:transparent;color:var(--gold2);border:1px solid var(--line)}
+button:disabled{opacity:.35;cursor:not-allowed;transform:none;box-shadow:none}
+:focus-visible{outline:2px solid var(--gold2);outline-offset:3px}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end;margin:12px 0}.row>input{flex:1;min-width:150px}
+.hero{display:flex;gap:clamp(18px,5vw,48px);align-items:center;flex-wrap:wrap;animation:rise 1.1s cubic-bezier(.2,.7,.2,1) both}
+@keyframes rise{from{opacity:0;transform:translateY(24px)}}
+.ring{position:relative;width:150px;height:150px;flex:none}
+.ring svg{transform:rotate(-90deg)}
+.ring circle{fill:none;stroke-width:3}.ring .bg{stroke:var(--line)}
+.ring .fg{stroke:var(--gold);stroke-linecap:round;transition:stroke-dashoffset 1.6s cubic-bezier(.2,.7,.2,1) .2s;filter:drop-shadow(0 0 6px rgba(216,184,111,.6))}
+.ring span{position:absolute;inset:0;display:grid;place-items:center;font:italic 22px var(--serif);color:var(--gold2)}
+.pts{font:400 clamp(56px,12vw,96px)/1 var(--serif);background:linear-gradient(100deg,var(--gold) 20%,#fff6d6 40%,var(--gold) 60%);background-size:250% 100%;-webkit-background-clip:text;background-clip:text;color:transparent;animation:sheen 5s linear infinite}
+@keyframes sheen{to{background-position:-250% 0}}
+.sub{color:var(--mute);margin-top:4px}
+.seal{position:relative;display:block;width:100%;text-align:center;font:400 clamp(22px,5vw,34px) var(--serif);letter-spacing:.22em;text-transform:uppercase;border:1px solid var(--gold);padding:22px 10px;background:transparent}
+.seal:focus{box-shadow:0 0 0 4px rgba(216,184,111,.15),0 0 40px rgba(216,184,111,.18) inset}
+.seal.pop{animation:stamp .9s cubic-bezier(.2,.9,.3,1.3)}
+@keyframes stamp{0%{transform:scale(1.08);box-shadow:0 0 0 0 rgba(216,184,111,.8)}60%{transform:scale(.98)}100%{transform:scale(1);box-shadow:0 0 0 38px rgba(216,184,111,0)}}
+.msg{min-height:26px;margin-top:6px}.err{color:var(--err)}.ok{color:var(--ok)}
+.plus{position:absolute;right:20px;top:10px;font:italic 28px var(--serif);color:var(--gold2);animation:float 1.4s ease-out forwards;pointer-events:none}
+@keyframes float{to{transform:translateY(-46px);opacity:0}}
+table{width:100%;border-collapse:collapse;font-size:15px}td,th{text-align:left;padding:12px 6px;border-bottom:1px solid var(--line)}tr{transition:background .3s}tr:hover{background:rgba(216,184,111,.06)}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0;border:1px solid var(--line)}
+.grid div{padding:18px;border-right:1px solid var(--line);color:var(--mute);font-size:14px}.grid b{display:block;font:400 38px var(--serif);color:var(--gold2)}
+.hide{display:none}.mute{color:var(--mute)}.tw{overflow-x:auto}
+.auth{max-width:440px;margin:6vh auto 0;text-align:center}.auth .row{justify-content:center}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+</style></head><body>
+<header><div class="logo">Box Rewards</div><nav><button class="ghost" onclick="go('c')">Customer</button><button class="ghost" onclick="go('a')">Factory owner</button></nav></header>
+<main id="app"></main>
+<script>
+const $=s=>document.querySelector(s);let view='c',last=0;
+const esc=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const dt=t=>new Date(t*1000).toLocaleString();
+const calm=matchMedia('(prefers-reduced-motion:reduce)').matches;
+function count(el,to,from=0){if(calm||from===to){el.textContent=to;return}const t0=performance.now();(function f(t){const k=Math.min(1,(t-t0)/1100),e=1-Math.pow(1-k,3);el.textContent=Math.round(from+(to-from)*e);if(k<1)requestAnimationFrame(f)})(t0)}
+async function api(p,b){const r=await fetch('/api/'+p,b===undefined?{}:{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});const d=await r.json().catch(()=>({}));if(!r.ok){const e=new Error(d.error||'Something went wrong');e.status=r.status;throw e}return d}
+function msg(t,ok){const m=$('#msg');if(m){m.textContent=t;m.className='msg '+(ok?'ok':'err')}}
+const val=id=>$('#'+id).value;
+function go(v){view=v;render()}
+async function render(){try{view==='c'?await customer():await admin()}catch(e){authForm()}}
+function authForm(){const a=view==='a';$('#app').innerHTML=`<section class="auth hero"><div style="width:100%"><h2>${a?'Factory owner':'Welcome'}</h2><p class="sub">${a?'Sign in to manage codes, rewards and fraud checks.':'Every box you open earns you something.'}</p>
+${a?'':'<div class="row"><input id="nm" placeholder="Your name (new accounts only)" autocomplete="name"></div><div class="row"><input id="em" type="email" placeholder="Email" autocomplete="email"></div>'}
+<div class="row"><input id="pw" type="password" placeholder="${a?'Admin password':'Password, 8+ characters'}" autocomplete="current-password"></div>
+<div class="row"><button onclick="auth('login')">Log in</button>${a?'':'<button class="ghost" onclick="auth(\'register\')">Create account</button>'}</div><div id="msg" class="msg"></div></div></section>`}
+async function auth(kind){try{await api(view==='a'?'admin/login':kind,view==='a'?{password:val('pw')}:{name:kind==='register'?val('nm'):'',email:val('em'),password:val('pw')});render()}catch(e){msg(e.message)}}
+async function out(){last=0;await api('logout',{}).catch(()=>{});render()}
+const TIERS=[[0,'Bronze'],[300,'Silver'],[1000,'Gold']];
+function prog(p){let i=TIERS.length-1;while(TIERS[i][0]>p)i--;if(i===TIERS.length-1)return{pct:1,txt:'Highest tier reached'};const[n,nm]=TIERS[i+1];return{pct:(p-TIERS[i][0])/(n-TIERS[i][0]),txt:`${n-p} points to ${nm}`}}
+async function customer(){const [m,rw]=await Promise.all([api('me'),api('rewards')]);const pr=prog(m.points),C=2*Math.PI*54;
+$('#app').innerHTML=`<section class="hero"><div class="ring"><svg width="150" height="150" viewBox="0 0 120 120"><circle class="bg" cx="60" cy="60" r="54"/><circle class="fg" id="fg" cx="60" cy="60" r="54" stroke-dasharray="${C}" stroke-dashoffset="${C}"/></svg><span>${m.tier}</span></div>
+<div><div class="sub">Welcome back, ${esc(m.name)}</div><div class="pts" id="pts">0</div><div class="sub">points &middot; ${pr.txt}</div></div></section>
+<section><h2>Open your box, enter the code</h2><div style="position:relative"><input id="code" class="seal" placeholder="XXXX-XXXX-XXXX" maxlength="14" autocomplete="off" aria-label="Product code"></div><div class="row"><button onclick="redeem()">Add points</button></div><div id="msg" class="msg"></div></section>
+<section><h2>Your rewards</h2>${rw.length?`<table>${rw.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.cost} pts</td><td class="mute">${r.stock} left</td><td><button ${m.points<r.cost?'disabled':''} onclick="claim(${r.id})">Claim</button></td></tr>`).join('')}</table>`:'<p class="mute">No rewards are available right now. Check back soon.</p>'}</section>
+<section><h2>History</h2><div class="tw"><table>${m.earned.map(e=>`<tr><td class="ok">+${e.points}</td><td>${esc(e.name)}</td><td class="mute">${dt(e.created_at)}</td></tr>`).join('')}${m.claimed.map(e=>`<tr><td>-${e.cost}</td><td>${esc(e.name)}</td><td class="mute">${dt(e.created_at)}</td></tr>`).join('')}</table></div>${m.earned.length+m.claimed.length?'':'<p class="mute">Enter your first code to start earning.</p>'}<div class="row"><button class="ghost" onclick="out()">Log out</button></div></section>`;
+count($('#pts'),m.points,last);last=m.points;requestAnimationFrame(()=>requestAnimationFrame(()=>{$('#fg').style.strokeDashoffset=C*(1-pr.pct)}))}
+async function redeem(){try{const d=await api('redeem',{code:val('code')});await customer();const s=$('#code');s.classList.add('pop');s.parentNode.insertAdjacentHTML('beforeend',`<div class="plus">+${d.points}</div>`);msg(`${d.points} points added for ${d.product}`,1)}catch(e){msg(e.message)}}
+async function claim(id){try{const d=await api('claim',{reward_id:id});await customer();msg(`Claimed: ${d.reward}`,1)}catch(e){msg(e.message)}}
+async function admin(){const s=await api('admin/stats');const rate=s.codes?Math.round(100*s.redeemed/s.codes):0;
+const st=[[s.customers,'customers'],[s.codes,'codes printed'],[s.redeemed,`redeemed (${rate}%)`],[s.points_issued,'points issued'],[s.points_spent,'points spent'],[s.failed_24h,'failed codes, 24h']];
+$('#app').innerHTML=`<section class="hero"><div style="width:100%"><h2>Overview</h2><div class="grid">${st.map(x=>`<div><b data-n="${x[0]}">0</b>${x[1]}</div>`).join('')}</div></div></section>
+<section><h2>Possible fraud</h2><p class="sub">Accounts with 3 or more wrong codes in 24 hours.</p>${s.suspicious.length?`<table>${s.suspicious.map(x=>`<tr><td>${esc(x.email)}</td><td class="err">${x.fails} failed</td></tr>`).join('')}</table>`:'<p class="mute">No suspicious accounts.</p>'}</section>
+<section><h2>Print codes</h2><div class="row"><select id="pid">${s.products.map(p=>`<option value="${p.id}">${esc(p.name)} (${p.points} pts)</option>`).join('')}</select><input id="qty" type="number" min="1" max="10000" value="100" aria-label="Number of codes" style="max-width:110px"><button onclick="gen()">Generate codes</button></div><div id="msg" class="msg"></div><div class="tw"><table>${s.products.map(p=>`<tr><td>${esc(p.name)}</td><td class="mute">${p.generated} generated</td><td class="mute">${p.redeemed} redeemed</td></tr>`).join('')}</table></div>
+<div class="row"><input id="pn" placeholder="New product name"><input id="pp" type="number" min="1" placeholder="Points per box"><button class="ghost" onclick="addP()">Add product</button></div></section>
+<section><h2>Rewards</h2><div class="tw"><table>${s.rewards.map(r=>`<tr><td>${esc(r.name)}</td><td>${r.cost} pts</td><td class="mute">${r.stock} in stock</td><td><button class="ghost" onclick="tog(${r.id})">${r.active?'Pause':'Resume'}</button></td></tr>`).join('')}</table></div>
+<div class="row"><input id="rn" placeholder="Reward name"><input id="rc" type="number" min="1" placeholder="Point cost"><input id="rs" type="number" min="0" placeholder="Stock"><button class="ghost" onclick="addR()">Add reward</button></div></section>
+<section><h2>Recent claims</h2><div class="tw"><table>${s.claims.map(x=>`<tr><td>${esc(x.email)}</td><td>${esc(x.name)}</td><td>${x.cost} pts</td><td class="mute">${dt(x.created_at)}</td></tr>`).join('')||'<tr><td class="mute">No claims yet.</td></tr>'}</table></div><div class="row"><button class="ghost" onclick="out()">Log out</button></div></section>`;
+document.querySelectorAll('[data-n]').forEach(e=>count(e,+e.dataset.n))}
+async function gen(){try{const d=await api('admin/batches',{product_id:+val('pid'),qty:+val('qty')});const blob=new Blob(['code\n'+d.codes.join('\n')],{type:'text/csv'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`batch-${d.batch_id}.csv`;a.click();msg(`Batch ${d.batch_id}: ${d.codes.length} codes downloaded. They are not stored in readable form, so save this file now.`,1)}catch(e){msg(e.message)}}
+const act=(p,b)=>api(p,b).then(admin).catch(e=>msg(e.message));
+const addP=()=>act('admin/products',{name:val('pn'),points:val('pp')}),addR=()=>act('admin/rewards',{name:val('rn'),cost:val('rc'),stock:val('rs')}),tog=id=>act('admin/rewards/toggle',{id});
+render();
+</script></body></html>
