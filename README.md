@@ -6,10 +6,11 @@ A factory prints a unique single-use code inside every product box. Customers cr
 
 ## Run
 ```bash
-cp .env.example .env        # then edit values
-set -a; source .env; set +a  # load env vars (Linux/Mac). Windows: set each var manually
-python3 server.py            # http://localhost:8000
+copy .env.example .env      # Windows (Mac/Linux: cp .env.example .env)
+# open .env in Notepad and set your own ADMIN_PASSWORD and CODE_SECRET
+python server.py            # http://localhost:8000
 ```
+`server.py` reads `.env` automatically. Without a `.env` the defaults are used (admin password `change-me-admin`).
 Customer area = default view. Factory owner = "Factory owner" button, password from `ADMIN_PASSWORD`.
 First start seeds one demo product and two rewards.
 
